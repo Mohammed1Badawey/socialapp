@@ -6,6 +6,7 @@ import postsReducer from "./Slices/postsSlice";
 import singlePostReducer from "./Slices/singlePostSlice";
 import userPostsReducer from "./Slices/userPostsSlice";
 import createPostReducer from "./Slices/createPostSlice";
+import deletePostReducer from "./Slices/deletePostSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     singlePost: singlePostReducer,
     userPosts: userPostsReducer,
     createPost: createPostReducer,
+    deletePost: deletePostReducer,
   },
 });
 

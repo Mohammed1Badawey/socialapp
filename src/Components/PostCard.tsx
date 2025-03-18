@@ -3,20 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import staticImg from "../assets/user-icon.webp";
 import { Link } from "react-router-dom";
+import { store } from "@/lib/Redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { deletePost } from "@/lib/Redux/Slices/deletePostSlice";
+import { getUserPosts } from "@/lib/Redux/Slices/userPostsSlice";
 
 const PostCard = ({ postData }: { postData: Post }) => {
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showPostDetails, setShowPostDetails] = useState(false);
+  const dispatch = useDispatch<typeof store.dispatch>();
+  const {id:userId} = useSelector((state: any) => state.deletePost);
 
   function handelUserPage(id: string) {
     navigate(`/user/${id}`);
   }
 
-  // function handelPostPage(id: string) {
-  //   navigate(`/post/${id}`);
-  // }
+  function handelDeletePost(id: string) {
+    dispatch(deletePost(id)).then(() => {
+      dispatch(getUserPosts(userId))});
+  }
 
   function handelCommentImg(imgSrc: string) {
     const allSrc = imgSrc.split("/");
@@ -73,10 +80,12 @@ const PostCard = ({ postData }: { postData: Post }) => {
           <div className="">
             {showPostDetails && (
               <div className="absolute -translate-x-1/2 -left-1 flex flex-col justify-center items-center text-center bg-gray-50 min-w-[100px] dark:bg-gray-800 outline border-gray-800 rounded shadow-xl p-2">
-                <Link to={`/post/${postData._id}`} className="border-b border-gray-300/90  w-full text-b">
+                <Link to={`/post/${postData._id}`} className="border-b border-gray-300/90  w-full">
                 Details
                 </Link>
-                <span className="border-b border-gray-300/90 cursor-pointer disabled w-full text-b">
+                <span  className="border-b border-gray-300/90 cursor-pointer w-full"
+                onClick={() => handelDeletePost(postData._id)}
+                >
                 Delete
                 </span>
           </div>

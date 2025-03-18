@@ -1,6 +1,6 @@
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { PostData, PostDataState } from "../../../Interfaces/types";
+import { PostDataState } from "../../../Interfaces/types";
 
 const initialState: PostDataState = {
   body: "",
