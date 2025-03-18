@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
 import { signUpValidation } from "./Validations";
-import { register } from "@/lib/signUpSlice";
-import Loading from './../../Shared/Loading';
+import { register } from "@/lib/Redux/Slices/signUpSlice";
+import Loading from "./../../Shared/Loading";
 import { useDispatch } from "react-redux";
-import { store } from "@/lib/store";
+import { store } from "@/lib/Redux/store";
 
 const SignupForms = () => {
   const dispatch = useDispatch<typeof store.dispatch>();
-  const  isLoading  = false;
+  const isLoading = false;
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -20,11 +20,10 @@ const SignupForms = () => {
       gender: "",
     },
     validationSchema: signUpValidation,
-    onSubmit: (values ) => {
+    onSubmit: (values) => {
       console.log(values);
-      dispatch(register(values))      
-    }
-
+      dispatch(register(values));
+    },
   });
 
   // State to track date components - initialize with empty strings to ensure controlled inputs
@@ -69,7 +68,7 @@ const SignupForms = () => {
       <div className="flex">
         <h1 className="font-bold text-4xl m-6">Bird App</h1>
       </div>
-      
+
       <form className="w-[40%]" onSubmit={formik.handleSubmit}>
         <div className="p-8 flex flex-col rounded-xl shadow-lg w-full m-auto bg-gray-100 dark:bg-gray-800 gap-6">
           <h2 className="text-black dark:text-white text-2xl font-bold mb-6">
@@ -262,9 +261,7 @@ const SignupForms = () => {
             disabled={isLoading}
             className="bg-blue-600 dark:disabled:bg-blue-700 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 rounded-2xl cursor-pointer mt-3 w-1/3"
           >
-            {isLoading? (
-              <Loading />
-            ) : 'Sign Up'}
+            {isLoading ? <Loading /> : "Sign Up"}
           </button>
 
           <p className="text-gray-400 dark:text-gray-300 text-sm mt-3">

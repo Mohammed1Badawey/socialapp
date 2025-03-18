@@ -2,13 +2,12 @@ import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SigninForm from "./Components/_Auth/Forms/SignInForm";
 import SignupForms from "./Components/_Auth/Forms/SignupForms";
-import { Home, UserPosts } from "./Components/_Root/Pages";
+import { Home, UserPosts, SinglePost } from "./Components/_Root/Pages";
 import AuthLayout from "./Components/_Auth/AuthLayout";
 import RootLayout from "./Components/_Root/RootLayout";
 import { Provider } from "react-redux";
-import { store } from "./lib/store";
-import ProtectedRoutes from "./Components/_Root/Pages/ProtectedRoutes";
-import SinglePost from "./Components/SinglePost/SinglePost";
+import { store } from "./lib/Redux/store";
+import ProtectedRoutes from "./Components/ProtectedRoutes";
 
 const App = () => {
   const routes = createBrowserRouter([
@@ -48,7 +47,7 @@ const App = () => {
             </ProtectedRoutes>
           ),
           path: "/post/:postId",
-        },  
+        },
         {
           element: (
             <ProtectedRoutes>

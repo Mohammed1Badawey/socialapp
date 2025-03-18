@@ -1,6 +1,6 @@
-import { authAxios } from "@/Api/AxiosConfig";
+import { authAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { LoggedUserState } from "../Interfaces/types";
+import { LoggedUserState } from "../../../Interfaces/types";
 
 const initialState: LoggedUserState = {
   _id: "",

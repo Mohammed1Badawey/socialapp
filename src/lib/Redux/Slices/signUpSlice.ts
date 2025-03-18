@@ -1,6 +1,6 @@
-import { publicAxios } from "@/Api/AxiosConfig";
+import { publicAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {SignUpState} from "../Interfaces/types";
+import { SignUpState } from "../../../Interfaces/types";
 
 const initialState: SignUpState = {
   SignUp: {},
@@ -15,7 +15,7 @@ export const register = createAsyncThunk(
       const res = await publicAxios.post("/users/signup", signUpData);
       return res.data;
     } catch (err: any) {
-      return rejectWithValue(err.response?.data || 'An error occurred');
+      return rejectWithValue(err.response?.data || "An error occurred");
     }
   }
 );

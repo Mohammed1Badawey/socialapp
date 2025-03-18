@@ -1,13 +1,11 @@
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { signInValidation } from "./Validations";
-import Loading from './../../Shared/Loading';
+import Loading from "./../../Shared/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import {  store } from "@/lib/store";
-import { signIn } from "@/lib/signInSlice";
-import { loggedUser } from '@/lib/userDataSlice'
-
-
+import { store } from "@/lib/Redux/store";
+import { signIn } from "@/lib/Redux/Slices/signInSlice";
+import { loggedUser } from "@/lib/Redux/Slices/userDataSlice";
 
 const SigninForm = () => {
   const navigate = useNavigate();
@@ -20,15 +18,14 @@ const SigninForm = () => {
       password: "",
     },
     validationSchema: signInValidation,
-    onSubmit: (values ) => {
+    onSubmit: (values) => {
       console.log(values);
       dispatch(signIn(values)).then(() => {
         dispatch(loggedUser());
         navigate("/");
         console.log(auth);
-        
-      });    
-    }
+      });
+    },
   });
 
   return (
@@ -36,13 +33,13 @@ const SigninForm = () => {
       <div className="flex">
         <h1 className="font-bold text-4xl m-6">Bird App</h1>
       </div>
-      
+
       <form className="w-[40%]" onSubmit={formik.handleSubmit}>
         <div className="p-8 flex flex-col rounded-xl shadow-lg w-full m-auto bg-gray-100 dark:bg-gray-800 gap-6">
           <h2 className="text-black dark:text-white text-2xl font-bold mb-6">
             Sign In
           </h2>
-         
+
           <div className="relative bg-inherit">
             <input
               type="text"
@@ -90,9 +87,7 @@ const SigninForm = () => {
             disabled={isLoading}
             className="bg-blue-600 dark:disabled:bg-blue-700 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 rounded-2xl cursor-pointer mt-3 w-1/3"
           >
-            {isLoading? (
-              <Loading />
-            ) : 'Sign In'}
+            {isLoading ? <Loading /> : "Sign In"}
           </button>
 
           <p className="text-gray-400 dark:text-gray-300 text-sm mt-3">
@@ -110,6 +105,4 @@ const SigninForm = () => {
   );
 };
 
-
-  
-  export default SigninForm
+export default SigninForm;

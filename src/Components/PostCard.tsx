@@ -1,7 +1,7 @@
 import { Post } from "@/Interfaces/types";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import staticImg from "../assets/user-icon-on-transparent-background-free-png.webp";
+import staticImg from "../assets/user-icon.webp";
 import { Link } from "react-router-dom";
 
 const PostCard = ({ postData }: { postData: Post }) => {

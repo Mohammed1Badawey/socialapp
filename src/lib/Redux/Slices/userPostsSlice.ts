@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Post } from "../Interfaces/types";
-import { authAxios } from "@/Api/AxiosConfig";
+import { Post } from "../../../Interfaces/types";
+import { authAxios } from "@/AxiosConfig/AxiosConfig";
 
 interface UserPostsState {
   userPosts: Post[] | null;
@@ -18,7 +18,7 @@ const initialState: UserPostsState = {
 
 export const getUserPosts = createAsyncThunk(
   "userPosts/getUserPosts",
-  async (userId:any, { rejectWithValue }) => {
+  async (userId: any, { rejectWithValue }) => {
     try {
       const res = await authAxios.get(`/users/${userId}/posts`);
       console.log("User posts:", res);
@@ -48,7 +48,7 @@ const userPostsSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getUserPosts.fulfilled, (state,action) => {
+      .addCase(getUserPosts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.userPosts = action.payload;
       })
