@@ -11,7 +11,7 @@ const ProtectedRoutes = ({ children }: ProtectedRoutesProps) => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.signIn.isAuthenticated
   );
-  if (isAuthenticated || localStorage.getItem("socialUserToken")) {
+  if ((isAuthenticated || localStorage.getItem("socialUserToken")) && localStorage.getItem("socialUserToken") !== "undefined" ) {
     return children;
   } else {
     return <Navigate to="/sign-in" />;

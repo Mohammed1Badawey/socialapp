@@ -72,10 +72,13 @@ const PostCard = ({ postData }: { postData: Post }) => {
           </button>
           <div className="">
             {showPostDetails && (
-              <div className="absolute -translate-x-1/2 -left-1 flex justify-center text-center bg-gray-50 min-w-[100px] dark:bg-gray-800 outline border-gray-800 rounded shadow-xl p-2">
-                <Link to={`/post/${postData._id}`} className="border-b-1 border-gray-900 w-full text-b">
+              <div className="absolute -translate-x-1/2 -left-1 flex flex-col justify-center items-center text-center bg-gray-50 min-w-[100px] dark:bg-gray-800 outline border-gray-800 rounded shadow-xl p-2">
+                <Link to={`/post/${postData._id}`} className="border-b border-gray-300/90  w-full text-b">
                 Details
                 </Link>
+                <span className="border-b border-gray-300/90 cursor-pointer disabled w-full text-b">
+                Delete
+                </span>
           </div>
             )}
           </div>

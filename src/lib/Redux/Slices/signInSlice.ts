@@ -46,6 +46,7 @@ export const signInSlice = createSlice({
       .addCase(signIn.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.error = action.payload;
+        state.isAuthenticated = false;
       });
   },
 });
