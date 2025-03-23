@@ -8,6 +8,7 @@ import RootLayout from "./Components/_Root/RootLayout";
 import { Provider } from "react-redux";
 import { store } from "./lib/Redux/store";
 import ProtectedRoutes from "./Components/ProtectedRoutes";
+import UpdatePost from "./Components/UpdatePost";
 
 const App = () => {
   const routes = createBrowserRouter([
@@ -56,6 +57,14 @@ const App = () => {
           ),
           path: "/user/:userId",
         },
+        {
+          element: (
+            <ProtectedRoutes>
+              <UpdatePost />
+            </ProtectedRoutes>
+          ),
+          path: "/edit-post/:postId",
+        }
       ],
     },
   ]);

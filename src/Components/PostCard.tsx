@@ -83,6 +83,10 @@ const PostCard = ({ postData }: { postData: Post }) => {
                 <Link to={`/post/${postData._id}`} className="border-b border-gray-300/90  w-full">
                 Details
                 </Link>
+                <Link to={`/edit-post/${postData._id}`} className="border-b border-gray-300/90  w-full"
+                >
+                Edit
+                </Link>
                 <span  className="border-b border-gray-300/90 cursor-pointer w-full"
                 onClick={() => handelDeletePost(postData._id)}
                 >

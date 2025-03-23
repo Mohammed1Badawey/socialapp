@@ -1,23 +1,39 @@
 import imgIcon from "@/assets/img-svg.svg";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost } from "@/lib/Redux/Slices/createPostSlice";
+import { updatePost } from "@/lib/Redux/Slices/updatePostSlice";
+import { getSinglePost } from "@/lib/Redux/Slices/singlePostSlice";
 import { store } from "@/lib/Redux/store";
-import { useRef, useState } from "react";
-import {postValidation} from "@/Components/Shared/PostJs";
+import { useRef, useState, useEffect } from "react";
+import { postValidation } from "@/Components/Shared/PostJs";
+import { useParams, useNavigate } from "react-router-dom";
 
-const CreatePost = () => {
+const UpdatePost = () => {
   const dispatch = useDispatch<typeof store.dispatch>();
+  const navigate = useNavigate();
+  const { postId: id } = useParams();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const { isLoading } = useSelector((state: any) => state.createPost);
+  const { isLoading } = useSelector((state: any) => state.updatePost);
+  const { post } = useSelector((state: any) => state.singlePost);
   const imageRef = useRef<HTMLInputElement>(null);
   const formData = new FormData();
 
+  useEffect(() => {
+    dispatch(getSinglePost(id));
+    console.log(id);
+    console.log(post);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (post && post.image) {
+      setPreview(post.image);
+    }
+  }, [post]);
 
   const formik = useFormik({
     initialValues: {
-      body: "",
+      body: post?.body || "",
     },
     validationSchema: postValidation,
     onSubmit: (values) => {
@@ -25,35 +41,37 @@ const CreatePost = () => {
       if (selectedImage) {
         formData.append("image", selectedImage);
       }
-      dispatch(createPost(formData)).then(() => {
-        handleRemoveImage()
-        formik.resetForm()}
-      )
-    }
+      dispatch(
+        updatePost({
+          postData: formData,
+          id,
+        })
+      ).then(() => {
+        handleRemoveImage();
+        formik.resetForm();
+        navigate(-1);
+      });
+    },
   });
 
-
-const handleFileChange = () => {
+  const handleFileChange = () => {
     const file = imageRef.current?.files?.[0];
     if (file) {
       setSelectedImage(file);
       setPreview(URL.createObjectURL(file));
-      console.log(file);
-      
     }
   };
 
   const handleRemoveImage = () => {
     setSelectedImage(null);
     setPreview(null);
-    console.log("Image removed");
-    
+    formData.delete("image");
   };
 
   return (
-    <div className="w-2xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-4 space-y-4 border border-gray-200 dark:border-gray-700 mb-6">
+    <div className="w-2xl h-fit mt-6 mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-4 space-y-4 border border-gray-200 dark:border-gray-700 mb-6">
       <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-        Create a Post
+        Update Post
       </h2>
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         <textarea
@@ -88,7 +106,7 @@ const handleFileChange = () => {
               <img src={imgIcon} alt="" className="size-6" />
             </div>
             <span className="text-sm text-gray-600 dark:text-gray-400">
-              Add Image
+              {preview ? "Change Image" : "Add Image"}
             </span>
             <input
               type="file"
@@ -100,16 +118,26 @@ const handleFileChange = () => {
             />
           </label>
 
-          <button
-            type="submit"
-            className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "Posting..." : "Post"}
-          </button>
+          <div className="space-x-2">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading}
+            >
+              {isLoading ? "Updating..." : "Update"}
+            </button>
+          </div>
         </div>
       </form>
     </div>
   );
 };
 
-export default CreatePost;
+export default UpdatePost;
