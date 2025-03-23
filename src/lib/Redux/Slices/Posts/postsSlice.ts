@@ -9,7 +9,7 @@ export const getAllPosts = createAsyncThunk(
   "postsSlice/getAllPosts",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await authAxios.get("/posts?limit=12");
+      const res = await authAxios.get("/posts");
       console.log("res", res.data);
       return res.data.posts;
     } catch (err: any) {
