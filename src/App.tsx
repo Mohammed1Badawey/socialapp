@@ -2,6 +2,7 @@ import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SigninForm from "./Components/_Auth/Forms/SignInForm";
 import SignupForms from "./Components/_Auth/Forms/SignupForms";
+import Settings from "./Components/Profile/Settings";
 import {
   Home,
   UserPosts,
@@ -77,6 +78,14 @@ const App = () => {
             </ProtectedRoutes>
           ),
           path: "/profile",
+        },
+        {
+          element: (
+            <ProtectedRoutes>
+              <Settings />
+            </ProtectedRoutes>
+          ),
+          path: "/settings",
         },
       ],
     },

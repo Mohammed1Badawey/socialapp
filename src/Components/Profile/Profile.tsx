@@ -4,8 +4,10 @@ import { RootState } from "@/lib/Redux/store";
 import { loggedUser } from "@/lib/Redux/Slices/User/userDataSlice";
 import { store } from "@/lib/Redux/store";
 import staticImg from "../../assets/user-icon.webp";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const Navigate = useNavigate();
   const dispatch = useDispatch<typeof store.dispatch>();
   const userData = useSelector((state: RootState) => state.userData);
 
@@ -111,10 +113,14 @@ const Profile = () => {
 
           {/* Action Buttons */}
           <div className="flex justify-center mt-8 space-x-4">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            <button
+            onClick={() => {Navigate("/settings")}}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
               Edit Profile
             </button>
-            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+            <button
+            onClick={() => {Navigate(`/user/${userData._id}`)}}
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
               My Posts
             </button>
           </div>

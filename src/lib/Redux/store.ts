@@ -2,6 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import signUpReducer from "./Slices/User/signUpSlice";
 import signInReducer from "./Slices/User/signInSlice";
 import userDataReducer from "./Slices/User/userDataSlice";
+import changePasswordReducer from "./Slices/User/changePasswordSlice";
+import uploadPhotoReducer from "./Slices/User/uploadPhotoSlice";
 import postsReducer from "./Slices/Posts/postsSlice";
 import singlePostReducer from "./Slices/Posts/singlePostSlice";
 import userPostsReducer from "./Slices/Posts/userPostsSlice";
@@ -18,6 +20,8 @@ export const store = configureStore({
     signUp: signUpReducer,
     signIn: signInReducer,
     userData: userDataReducer,
+    changePassword: changePasswordReducer,
+    uploadPhoto: uploadPhotoReducer,
     posts: postsReducer,
     singlePost: singlePostReducer,
     userPosts: userPostsReducer,

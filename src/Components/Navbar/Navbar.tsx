@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import img from "../../assets/AuthIMG-dark.png";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/lib/Redux/store";
 // import { loggedUser } from "@/lib/Redux/Slices/User/userDataSlice";
 // import { store } from "@/lib/Redux/store";
 
 const Navbar = () => {
   // const dispatch = useDispatch<typeof store.dispatch>();
-  const  userData  = useSelector((state: RootState) => state.userData);
+  const userData = useSelector((state: RootState) => state.userData);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <>
@@ -22,49 +22,45 @@ const Navbar = () => {
             >
               <img
                 className="w-9 h-9 rounded-full"
-                src={userData.photo? userData.photo : img}
+                src={userData.photo ? userData.photo : img}
                 alt="user photo"
               />
             </button>
 
             {isMenuOpen && (
-                         <div
-                         className="z-50 absolute top-8 w-32 my-4 text-base bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-lg shadow-sm"
-                       >
-                         <div className="px-4 py-3">
-                           <span className="block text-sm text-gray-900 dark:text-white">
-                            {userData.name? userData.name : "User"}
-                           </span>
-                         </div>
-                         <ul className="py-2"
-                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                         >
-                           <li>
-                             <Link
-                               to="/profile"
-                               className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                             >
-                               Profile
-                             </Link>
-                           </li>
-                           <li>
-                             <a
-                               href="#"
-                               className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                             >
-                               Settings
-                             </a>
-                           </li>
-                           <li>
-                             <a
-                               href="#"
-                               className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                             >
-                               Sign out
-                             </a>
-                           </li>
-                         </ul>
-                       </div> 
+              <div className="z-50 absolute top-8 w-32 my-4 text-base bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-lg shadow-sm">
+                <div className="px-4 py-3">
+                  <span className="block text-sm text-gray-900 dark:text-white">
+                    {userData.name ? userData.name : "User"}
+                  </span>
+                </div>
+                <ul className="py-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                  <li>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/settings"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Settings
+                    </Link>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Sign out
+                    </a>
+                  </li>
+                </ul>
+              </div>
             )}
           </div>
           <div
