@@ -27,7 +27,14 @@ export const signIn = createAsyncThunk(
 export const signInSlice = createSlice({
   name: "SignIn",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAuthState: (state) => {
+      state.isAuthenticated = false;
+      state.token = "";
+      state.message = "";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signIn.pending, (state) => {

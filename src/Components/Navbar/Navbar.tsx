@@ -1,15 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import img from "../../assets/AuthIMG-dark.png";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/lib/Redux/store";
-// import { loggedUser } from "@/lib/Redux/Slices/User/userDataSlice";
-// import { store } from "@/lib/Redux/store";
+import { logout } from "@/lib/Redux/Slices/User/logoutSlice";
+import { store } from "@/lib/Redux/store";
 
 const Navbar = () => {
-  // const dispatch = useDispatch<typeof store.dispatch>();
+  const dispatch = useDispatch<typeof store.dispatch>();
+  const navigate = useNavigate();
   const userData = useSelector((state: RootState) => state.userData);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(logout()).then(() => {
+      navigate("/sign-in");
+    });
+  };
   return (
     <>
       <nav className="bg-blue-600 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
@@ -52,12 +59,12 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       Sign out
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </div>

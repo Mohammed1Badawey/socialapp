@@ -27,7 +27,6 @@ const PostCard = ({ postData }: { postData: Post }) => {
   );
   const dispatch = useDispatch<typeof store.dispatch>();
   const { id: userId } = useSelector((state: any) => state.deletePost);
-  const userData = useSelector((state: RootState) => state.userData);
   const currentUser = useSelector((state: RootState) => state.userData);
 
   useEffect(() => {
