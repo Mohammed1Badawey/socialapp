@@ -1,10 +1,10 @@
 import imgIcon from "@/assets/img-svg.svg";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost } from "@/lib/Redux/Slices/createPostSlice";
+import { createPost } from "@/lib/Redux/Slices/Posts/createPostSlice";
 import { store } from "@/lib/Redux/store";
 import { useRef, useState } from "react";
-import {postValidation} from "@/Components/Shared/PostJs";
+import { postValidation } from "@/Components/Shared/PostJs";
 
 const CreatePost = () => {
   const dispatch = useDispatch<typeof store.dispatch>();
@@ -13,7 +13,6 @@ const CreatePost = () => {
   const { isLoading } = useSelector((state: any) => state.createPost);
   const imageRef = useRef<HTMLInputElement>(null);
   const formData = new FormData();
-
 
   const formik = useFormik({
     initialValues: {
@@ -26,20 +25,18 @@ const CreatePost = () => {
         formData.append("image", selectedImage);
       }
       dispatch(createPost(formData)).then(() => {
-        handleRemoveImage()
-        formik.resetForm()}
-      )
-    }
+        handleRemoveImage();
+        formik.resetForm();
+      });
+    },
   });
 
-
-const handleFileChange = () => {
+  const handleFileChange = () => {
     const file = imageRef.current?.files?.[0];
     if (file) {
       setSelectedImage(file);
       setPreview(URL.createObjectURL(file));
       console.log(file);
-      
     }
   };
 
@@ -47,7 +44,6 @@ const handleFileChange = () => {
     setSelectedImage(null);
     setPreview(null);
     console.log("Image removed");
-    
   };
 
   return (

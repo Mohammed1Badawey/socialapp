@@ -1,7 +1,7 @@
 import PostCard from "@/Components/PostCard";
 import CreatePost from "@/Components/CreatePost";
 import { Post } from "@/Interfaces/types";
-import { getAllPosts } from "@/lib/Redux/Slices/postsSlice";
+import { getAllPosts } from "@/lib/Redux/Slices/Posts/postsSlice";
 import { store, RootState } from "@/lib/Redux/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

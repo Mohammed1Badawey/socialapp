@@ -1,8 +1,8 @@
 import imgIcon from "@/assets/img-svg.svg";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePost } from "@/lib/Redux/Slices/updatePostSlice";
-import { getSinglePost } from "@/lib/Redux/Slices/singlePostSlice";
+import { updatePost } from "@/lib/Redux/Slices/Posts/updatePostSlice";
+import { getSinglePost } from "@/lib/Redux/Slices/Posts/singlePostSlice";
 import { store } from "@/lib/Redux/store";
 import { useRef, useState, useEffect } from "react";
 import { postValidation } from "@/Components/Shared/PostJs";

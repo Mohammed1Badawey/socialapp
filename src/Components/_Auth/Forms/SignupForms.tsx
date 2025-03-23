@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
 import { signUpValidation } from "./Validations";
-import { register } from "@/lib/Redux/Slices/signUpSlice";
+import { register } from "@/lib/Redux/Slices/User/signUpSlice";
 import Loading from "./../../Shared/Loading";
 import { useDispatch } from "react-redux";
 import { store } from "@/lib/Redux/store";

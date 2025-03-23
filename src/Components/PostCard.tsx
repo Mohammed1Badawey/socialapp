@@ -5,8 +5,10 @@ import staticImg from "../assets/user-icon.webp";
 import { Link } from "react-router-dom";
 import { store } from "@/lib/Redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { deletePost } from "@/lib/Redux/Slices/deletePostSlice";
-import { getUserPosts } from "@/lib/Redux/Slices/userPostsSlice";
+import { deletePost } from "@/lib/Redux/Slices/Posts/deletePostSlice";
+import { getUserPosts } from "@/lib/Redux/Slices/Posts/userPostsSlice";
+import { createComment } from "@/lib/Redux/Slices/Comments/createCommentSlice";
+import { getSinglePost } from "@/lib/Redux/Slices/Posts/singlePostSlice";
 
 const PostCard = ({ postData }: { postData: Post }) => {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const PostCard = ({ postData }: { postData: Post }) => {
   const [showModal, setShowModal] = useState(false);
   const [showPostDetails, setShowPostDetails] = useState(false);
   const dispatch = useDispatch<typeof store.dispatch>();
-  const {id:userId} = useSelector((state: any) => state.deletePost);
+  const { id: userId } = useSelector((state: any) => state.deletePost);
 
   function handelUserPage(id: string) {
     navigate(`/user/${id}`);
@@ -22,7 +24,8 @@ const PostCard = ({ postData }: { postData: Post }) => {
 
   function handelDeletePost(id: string) {
     dispatch(deletePost(id)).then(() => {
-      dispatch(getUserPosts(userId))});
+      dispatch(getUserPosts(userId));
+    });
   }
 
   function handelCommentImg(imgSrc: string) {
@@ -37,8 +40,18 @@ const PostCard = ({ postData }: { postData: Post }) => {
 
   const handleCommentSubmit = () => {
     if (!comment.trim()) return;
-    // TODO: Implement comment submission logic here
-    setComment("");
+
+    const commentData = {
+      content: comment,
+      post: postData._id,
+    };
+
+    dispatch(createComment(commentData)).then(() => {
+      // Refresh post data to show the new comment
+      dispatch(getSinglePost(postData._id));
+
+      setComment("");
+    });
   };
 
   const sortedComments = [...postData.comments].sort(
@@ -50,55 +63,59 @@ const PostCard = ({ postData }: { postData: Post }) => {
   const displayedComments = sortedComments.slice(0, numCommentsToShow);
   return (
     <div className="w-2xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-4 space-y-4 border border-gray-200 dark:border-gray-700">
-      
       <div className="flex items-center space-x-3 justify-between">
         <div className="flex items-center space-x-3">
-        <img
-          src={postData.user.photo}
-          alt={postData.user.name}
-          className="size-12 rounded-full border dark:border-gray-600 cursor-pointer"
-          onClick={() => handelUserPage(postData.user._id)}
-        />
-        <div>
-          <p
-            className="text-lg font-semibold dark:text-white cursor-pointer"
+          <img
+            src={postData.user.photo}
+            alt={postData.user.name}
+            className="size-12 rounded-full border dark:border-gray-600 cursor-pointer"
             onClick={() => handelUserPage(postData.user._id)}
-          >
-            {postData.user.name}
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {new Date(postData.createdAt).toUTCString()}
-          </p>
-        </div>
+          />
+          <div>
+            <p
+              className="text-lg font-semibold dark:text-white cursor-pointer"
+              onClick={() => handelUserPage(postData.user._id)}
+            >
+              {postData.user.name}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {new Date(postData.createdAt).toUTCString()}
+            </p>
+          </div>
         </div>
         <div className="relative">
-          <button className="text-2xl font-bold p-2 cursor-pointer"
-          onClick={() => setShowPostDetails(!showPostDetails)}
+          <button
+            className="text-2xl font-bold p-2 cursor-pointer"
+            onClick={() => setShowPostDetails(!showPostDetails)}
           >
             ...
           </button>
           <div className="">
             {showPostDetails && (
               <div className="absolute -translate-x-1/2 -left-1 flex flex-col justify-center items-center text-center bg-gray-50 min-w-[100px] dark:bg-gray-800 outline border-gray-800 rounded shadow-xl p-2">
-                <Link to={`/post/${postData._id}`} className="border-b border-gray-300/90  w-full">
-                Details
-                </Link>
-                <Link to={`/edit-post/${postData._id}`} className="border-b border-gray-300/90  w-full"
+                <Link
+                  to={`/post/${postData._id}`}
+                  className="border-b border-gray-300/90  w-full"
                 >
-                Edit
+                  Details
                 </Link>
-                <span  className="border-b border-gray-300/90 cursor-pointer w-full"
-                onClick={() => handelDeletePost(postData._id)}
+                <Link
+                  to={`/edit-post/${postData._id}`}
+                  className="border-b border-gray-300/90  w-full"
                 >
-                Delete
+                  Edit
+                </Link>
+                <span
+                  className="border-b border-gray-300/90 cursor-pointer w-full"
+                  onClick={() => handelDeletePost(postData._id)}
+                >
+                  Delete
                 </span>
-          </div>
+              </div>
             )}
           </div>
         </div>
       </div>
-
-
 
       <p className="text-gray-800 dark:text-gray-200">{postData.body}</p>
       {postData.image && (
@@ -109,7 +126,7 @@ const PostCard = ({ postData }: { postData: Post }) => {
           onClick={() => setShowModal(true)}
         />
       )}
-      
+
       <div className="border-t dark:border-gray-700 py-2">
         <div className="flex gap-2 mb-4">
           <input

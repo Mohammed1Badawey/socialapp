@@ -1,6 +1,6 @@
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { PostDataState } from "../../../Interfaces/types";
+import { PostDataState } from "../../../../Interfaces/types";
 
 const initialState: PostDataState = {
   body: "",
@@ -10,13 +10,13 @@ const initialState: PostDataState = {
 };
 
 export const createPost = createAsyncThunk(
-    "createPostSlice/createPost",
-    async (postData: FormData, { rejectWithValue }) => {
-      try {
-        const res = await authAxios.post("/posts", postData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });                  
-        return res.data;
+  "createPostSlice/createPost",
+  async (postData: FormData, { rejectWithValue }) => {
+    try {
+      const res = await authAxios.post("/posts", postData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
     } catch (err: any) {
       console.log("PostDataErr", err);
       return rejectWithValue(err.response?.data?.error || "An error occurred");

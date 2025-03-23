@@ -4,8 +4,8 @@ import { signInValidation } from "./Validations";
 import Loading from "./../../Shared/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "@/lib/Redux/store";
-import { signIn } from "@/lib/Redux/Slices/signInSlice";
-import { loggedUser } from "@/lib/Redux/Slices/userDataSlice";
+import { signIn } from "@/lib/Redux/Slices/User/signInSlice";
+import { loggedUser } from "@/lib/Redux/Slices/User/userDataSlice";
 
 const SigninForm = () => {
   const navigate = useNavigate();

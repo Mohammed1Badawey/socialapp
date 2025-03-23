@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import signUpReducer from "./Slices/signUpSlice";
-import signInReducer from "./Slices/signInSlice";
-import userDataReducer from "./Slices/userDataSlice";
-import postsReducer from "./Slices/postsSlice";
-import singlePostReducer from "./Slices/singlePostSlice";
-import userPostsReducer from "./Slices/userPostsSlice";
-import createPostReducer from "./Slices/createPostSlice";
-import updatePostReducer from "./Slices/updatePostSlice";
-import deletePostReducer from "./Slices/deletePostSlice";
+import signUpReducer from "./Slices/User/signUpSlice";
+import signInReducer from "./Slices/User/signInSlice";
+import userDataReducer from "./Slices/User/userDataSlice";
+import postsReducer from "./Slices/Posts/postsSlice";
+import singlePostReducer from "./Slices/Posts/singlePostSlice";
+import userPostsReducer from "./Slices/Posts/userPostsSlice";
+import createPostReducer from "./Slices/Posts/createPostSlice";
+import updatePostReducer from "./Slices/Posts/updatePostSlice";
+import deletePostReducer from "./Slices/Posts/deletePostSlice";
+import createCommentReducer from "./Slices/Comments/createCommentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     createPost: createPostReducer,
     updatePost: updatePostReducer,
     deletePost: deletePostReducer,
+    createComment: createCommentReducer,
   },
 });
 

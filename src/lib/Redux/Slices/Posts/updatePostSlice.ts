@@ -1,6 +1,6 @@
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { PostDataState } from "../../../Interfaces/types";
+import { PostDataState } from "../../../../Interfaces/types";
 
 const initialState: PostDataState = {
   body: "",
@@ -12,7 +12,7 @@ const initialState: PostDataState = {
 export const updatePost = createAsyncThunk(
   "updatePostSlice/updatePost",
   async (
-    { postData, id }: { postData: FormData; id: string|undefined },
+    { postData, id }: { postData: FormData; id: string | undefined },
     { rejectWithValue }
   ) => {
     try {

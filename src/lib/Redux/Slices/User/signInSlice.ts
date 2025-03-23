@@ -1,6 +1,6 @@
 import { publicAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { SignInState, SignInData } from "../../../Interfaces/types";
+import { SignInState, SignInData } from "../../../../Interfaces/types";
 
 const initialState: SignInState = {
   message: "",

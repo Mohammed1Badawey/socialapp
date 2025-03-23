@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Post } from "../../../Interfaces/types";
+import { Post } from "../../../../Interfaces/types";
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
 const initialState: { post: Post | null; isLoading: boolean } = {
   post: null,
