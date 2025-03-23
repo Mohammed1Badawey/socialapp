@@ -9,6 +9,9 @@ import createPostReducer from "./Slices/Posts/createPostSlice";
 import updatePostReducer from "./Slices/Posts/updatePostSlice";
 import deletePostReducer from "./Slices/Posts/deletePostSlice";
 import createCommentReducer from "./Slices/Comments/createCommentSlice";
+import postCommentsReducer from "./Slices/Comments/getPostCommentsSlice";
+import updateCommentReducer from "./Slices/Comments/updateCommentSlice";
+import deleteCommentReducer from "./Slices/Comments/deleteCommentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +25,9 @@ export const store = configureStore({
     updatePost: updatePostReducer,
     deletePost: deletePostReducer,
     createComment: createCommentReducer,
+    postComments: postCommentsReducer,
+    updateComment: updateCommentReducer,
+    deleteComment: deleteCommentReducer,
   },
 });
 

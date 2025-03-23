@@ -1,6 +1,6 @@
 import { Post } from "@/Interfaces/types";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import staticImg from "../assets/user-icon.webp";
 import { Link } from "react-router-dom";
 import { store } from "@/lib/Redux/store";
@@ -9,14 +9,30 @@ import { deletePost } from "@/lib/Redux/Slices/Posts/deletePostSlice";
 import { getUserPosts } from "@/lib/Redux/Slices/Posts/userPostsSlice";
 import { createComment } from "@/lib/Redux/Slices/Comments/createCommentSlice";
 import { getSinglePost } from "@/lib/Redux/Slices/Posts/singlePostSlice";
+import { getPostComments } from "@/lib/Redux/Slices/Comments/getPostCommentsSlice";
+import { updateComment } from "@/lib/Redux/Slices/Comments/updateCommentSlice";
+import { deleteComment } from "@/lib/Redux/Slices/Comments/deleteCommentSlice";
+import { RootState } from "@/lib/Redux/store";
+import { loggedUser } from "@/lib/Redux/Slices/User/userDataSlice";
 
 const PostCard = ({ postData }: { postData: Post }) => {
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showPostDetails, setShowPostDetails] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editCommentContent, setEditCommentContent] = useState("");
+  const [showCommentOptions, setShowCommentOptions] = useState<string | null>(
+    null
+  );
   const dispatch = useDispatch<typeof store.dispatch>();
   const { id: userId } = useSelector((state: any) => state.deletePost);
+
+  const currentUser = useSelector((state: RootState) => state.userData);
+
+  useEffect(() => {
+    dispatch(loggedUser());
+  }, [dispatch]);
 
   function handelUserPage(id: string) {
     navigate(`/user/${id}`);
@@ -48,10 +64,51 @@ const PostCard = ({ postData }: { postData: Post }) => {
 
     dispatch(createComment(commentData)).then(() => {
       // Refresh post data to show the new comment
-      dispatch(getSinglePost(postData._id));
-
+      dispatch(getSinglePost(postData._id)).then(() => {
+        dispatch(getPostComments(postData._id));
+      });
       setComment("");
     });
+  };
+
+  const handleEditComment = (commentId: string, content: string) => {
+    setEditingCommentId(commentId);
+    setEditCommentContent(content);
+  };
+
+  const handleUpdateComment = () => {
+    if (!editCommentContent.trim() || !editingCommentId) return;
+
+    const commentData = {
+      content: editCommentContent,
+      commentId: editingCommentId,
+    };
+
+    dispatch(updateComment(commentData)).then(() => {
+      // Refresh post data to show the updated comment
+      dispatch(getSinglePost(postData._id)).then(() => {
+        dispatch(getPostComments(postData._id));
+      });
+      setEditingCommentId(null);
+      setEditCommentContent("");
+    });
+  };
+
+  const handleDeleteComment = (commentId: string) => {
+    dispatch(deleteComment(commentId)).then(() => {
+      // Refresh post data to show the comment has been deleted
+      dispatch(getSinglePost(postData._id)).then(() => {
+        dispatch(getPostComments(postData._id));
+      });
+    });
+  };
+
+  const toggleCommentOptions = (commentId: string) => {
+    if (showCommentOptions === commentId) {
+      setShowCommentOptions(null);
+    } else {
+      setShowCommentOptions(commentId);
+    }
   };
 
   const sortedComments = [...postData.comments].sort(
@@ -140,7 +197,7 @@ const PostCard = ({ postData }: { postData: Post }) => {
             onClick={handleCommentSubmit}
             className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 rounded-lg transition-colors"
           >
-            Post
+            Comment
           </button>
         </div>
         <p className="text-gray-600 dark:text-gray-300 text-sm font-semibold py-3">
@@ -154,16 +211,83 @@ const PostCard = ({ postData }: { postData: Post }) => {
                 alt={comment.commentCreator.name}
                 className="size-8 object-cover rounded-full border dark:border-gray-600"
               />
-              <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg w-full">
-                <p className="text-sm font-semibold dark:text-white">
-                  {comment.commentCreator.name}
-                </p>
-                <p className="text-gray-700 dark:text-gray-300 text-sm">
-                  {comment.content}
-                </p>
-                <p className="text-xs text-gray-400 dark:text-gray-500">
-                  {new Date(comment.createdAt).toUTCString()}
-                </p>
+              <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg w-full relative">
+                <div className="flex justify-between items-start">
+                  <p className="text-sm font-semibold dark:text-white">
+                    {comment.commentCreator.name}
+
+                  </p>
+                  {currentUser &&
+                    currentUser._id === comment.commentCreator._id && (
+                      <div className="relative">
+                        <button
+                          className="text-lg font-bold px-2 cursor-pointer"
+                          onClick={() => toggleCommentOptions(comment._id)}
+                        >
+                          ...
+                        </button>
+
+                        {showCommentOptions === comment._id && (
+                          <div className="absolute right-0 flex flex-col justify-center items-center text-center min-w-[80px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-xl p-2 z-10">
+                            <span
+                              className="border-b border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 cursor-pointer w-full py-1 hover:text-blue-600 dark:hover:text-blue-400"
+                              onClick={() =>
+                                handleEditComment(comment._id, comment.content)
+                              }
+                            >
+                              Edit
+                            </span>
+                            <span
+                              className="cursor-pointer w-full text-gray-700 dark:text-gray-300 py-1 hover:text-red-600 dark:hover:text-red-400"
+                              onClick={() => handleDeleteComment(comment._id)}
+                            >
+                              Delete
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                </div>
+
+                {editingCommentId === comment._id ? (
+                  <div className="mt-2">
+                    <textarea
+                      aria-label="Edit comment"
+                      placeholder="Edit your comment..."
+                      title="Edit comment"
+                      value={editCommentContent}
+                      onChange={(e) => setEditCommentContent(e.target.value)}
+                      className="w-full p-2 text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 border border-gray-300 dark:border-gray-600"
+                      rows={2}
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={handleUpdateComment}
+                        className="px-3 py-1 text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 rounded-lg transition-colors text-sm"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingCommentId(null);
+                          setEditCommentContent("");
+                        }}
+                        className="px-3 py-1 text-gray-700 dark:text-gray-300 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 rounded-lg transition-colors text-sm"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm">
+                      {comment.content}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                      {new Date(comment.createdAt).toUTCString()}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           ))}

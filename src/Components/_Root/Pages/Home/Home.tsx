@@ -16,7 +16,7 @@ const Home = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex flex-col space-y-4 justify-start w-full p-8 bg-amber-700">
+    <div className="flex flex-col space-y-4 justify-start w-full p-8">
       <CreatePost />
       {allPosts?.map((post: Post) => (
         <PostCard postData={post} key={post._id} />
