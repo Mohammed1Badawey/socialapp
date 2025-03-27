@@ -52,7 +52,7 @@ export type Comments = {
   post: string;
   createdAt: string;
 };
-export type PostDataState = {
+export type PostDataIntiStateType = {
   body: string;
   image: string | null;
   isLoading: boolean;

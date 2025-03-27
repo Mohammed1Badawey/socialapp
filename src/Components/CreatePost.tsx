@@ -5,12 +5,14 @@ import { createPost } from "@/lib/Redux/Slices/Posts/createPostSlice";
 import { store } from "@/lib/Redux/store";
 import { useRef, useState } from "react";
 import { postValidation } from "@/Components/Shared/PostJs";
+import { RootState } from "@/lib/Redux/store";
+
 
 const CreatePost = () => {
   const dispatch = useDispatch<typeof store.dispatch>();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const { isLoading } = useSelector((state: any) => state.createPost);
+  const { isLoading } = useSelector((state: RootState) => state.createPost);
   const imageRef = useRef<HTMLInputElement>(null);
   const formData = new FormData();
 

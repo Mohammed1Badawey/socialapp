@@ -1,8 +1,8 @@
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { PostDataState } from "../../../../Interfaces/types";
+import { PostDataIntiStateType } from "../../../../Interfaces/types";
 
-const initialState: PostDataState = {
+const initialState: PostDataIntiStateType = {
   body: "",
   image: null,
   isLoading: false,

@@ -3,8 +3,9 @@ import img from "../../assets/AuthIMG-dark.png";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/lib/Redux/store";
-import { logout } from "@/lib/Redux/Slices/User/logoutSlice";
+import { logoutUser } from "@/lib/Redux/Slices/User/logoutSlice";
 import { store } from "@/lib/Redux/store";
+import ThemeToggle from "../ThemeToggle";
 
 const Navbar = () => {
   const dispatch = useDispatch<typeof store.dispatch>();
@@ -13,9 +14,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch(logout()).then(() => {
-      navigate("/sign-in");
-    });
+    dispatch(logoutUser());
+    navigate("/sign-in");
   };
   return (
     <>
@@ -65,6 +65,11 @@ const Navbar = () => {
                     >
                       Sign out
                     </button>
+                  </li>
+                  <li>
+                    <div className="px-1.5">
+                      <ThemeToggle />
+                    </div>
                   </li>
                 </ul>
               </div>
