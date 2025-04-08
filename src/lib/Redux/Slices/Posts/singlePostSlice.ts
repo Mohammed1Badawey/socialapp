@@ -1,15 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Post } from "../../../../Interfaces/types";
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
+import { getPostComments } from "../Comments/getPostCommentsSlice";
 const initialState: { post: Post | null; isLoading: boolean } = {
   post: null,
   isLoading: false,
 };
 export const getSinglePost = createAsyncThunk(
   "singlePostSlice/getSinglePost",
-  async (id: any, { rejectWithValue }) => {
+  async (id: any, { rejectWithValue,dispatch }) => {
     try {
       const res = await authAxios.get(`/posts/${id}`);
+      dispatch(getPostComments(id));
       console.log("res", res.data);
       return res.data.post;
     } catch (err: any) {

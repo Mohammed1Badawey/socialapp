@@ -6,14 +6,14 @@ import { Link } from "react-router-dom";
 import { store } from "@/lib/Redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePost } from "@/lib/Redux/Slices/Posts/deletePostSlice";
-import { getUserPosts } from "@/lib/Redux/Slices/Posts/userPostsSlice";
 import { createComment } from "@/lib/Redux/Slices/Comments/createCommentSlice";
-import { getSinglePost } from "@/lib/Redux/Slices/Posts/singlePostSlice";
-import { getPostComments } from "@/lib/Redux/Slices/Comments/getPostCommentsSlice";
 import { updateComment } from "@/lib/Redux/Slices/Comments/updateCommentSlice";
 import { deleteComment } from "@/lib/Redux/Slices/Comments/deleteCommentSlice";
 import { RootState } from "@/lib/Redux/store";
 import { loggedUser } from "@/lib/Redux/Slices/User/userDataSlice";
+// import { getUserPosts } from "@/lib/Redux/Slices/Posts/userPostsSlice";
+// import { getSinglePost } from "@/lib/Redux/Slices/Posts/singlePostSlice";
+// import { getPostComments } from "@/lib/Redux/Slices/Comments/getPostCommentsSlice";
 
 const PostCard = ({ postData }: { postData: Post }) => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const PostCard = ({ postData }: { postData: Post }) => {
     null
   );
   const dispatch = useDispatch<typeof store.dispatch>();
-  const { id: userId } = useSelector((state: any) => state.deletePost);
+  // const { id: userId } = useSelector((state: any) => state.deletePost);
   const currentUser = useSelector((state: RootState) => state.userData);
 
   useEffect(() => {
@@ -39,7 +39,6 @@ const PostCard = ({ postData }: { postData: Post }) => {
 
   function handelDeletePost(id: string) {
     dispatch(deletePost(id)).then(() => {
-      dispatch(getUserPosts(userId));
     });
   }
 
@@ -63,9 +62,6 @@ const PostCard = ({ postData }: { postData: Post }) => {
 
     dispatch(createComment(commentData)).then(() => {
       // Refresh post data to show the new comment
-      dispatch(getSinglePost(postData._id)).then(() => {
-        dispatch(getPostComments(postData._id));
-      });
       setComment("");
     });
   };
@@ -85,21 +81,16 @@ const PostCard = ({ postData }: { postData: Post }) => {
 
     dispatch(updateComment(commentData)).then(() => {
       // Refresh post data to show the updated comment
-      dispatch(getSinglePost(postData._id)).then(() => {
-        dispatch(getPostComments(postData._id));
-      });
       setEditingCommentId(null);
       setEditCommentContent("");
     });
   };
 
   const handleDeleteComment = (commentId: string) => {
-    dispatch(deleteComment(commentId)).then(() => {
-      // Refresh post data to show the comment has been deleted
-      dispatch(getSinglePost(postData._id)).then(() => {
-        dispatch(getPostComments(postData._id));
-      });
-    });
+    dispatch(deleteComment({
+      commentId: commentId,
+      postId: postData._id,
+    }))
   };
 
   const toggleCommentOptions = (commentId: string) => {

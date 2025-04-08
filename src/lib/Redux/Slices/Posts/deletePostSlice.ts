@@ -1,14 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
+import { getUserPosts } from "./userPostsSlice";
 const initialState = {
   id: "",
   isLoading: false,
 };
 export const deletePost = createAsyncThunk(
   "deletePostSlice/deletePost",
-  async (id: any, { rejectWithValue }) => {
+  async (id: any, { rejectWithValue, dispatch }) => {
     try {
       const res = await authAxios.delete(`/posts/${id}`);
+      dispatch(getUserPosts(id));
       console.log("res", res);
       return res.data.post.id;
     } catch (err: any) {

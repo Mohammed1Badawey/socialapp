@@ -1,5 +1,6 @@
 import { authAxios } from "@/AxiosConfig/AxiosConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { getSinglePost } from "../Posts/singlePostSlice";
 
 const initialState = {
   content: "",
@@ -15,11 +16,12 @@ type CommentUpdateData = {
 
 export const updateComment = createAsyncThunk(
   "updateCommentSlice/updateComment",
-  async (commentData: CommentUpdateData, { rejectWithValue }) => {
+  async (commentData: CommentUpdateData, { rejectWithValue, dispatch }) => {
     try {
       const res = await authAxios.put(`/comments/${commentData.commentId}`, {
         content: commentData.content,
       });
+      dispatch(getSinglePost(res.data.comment.post));
       return res.data;
     } catch (err: any) {
       console.log("CommentUpdateErr", err);
